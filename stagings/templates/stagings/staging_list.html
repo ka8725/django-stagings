@@ -1,0 +1,20 @@
+{% extends 'stagings/base.html' %}
+
+{% block content %}
+  {% regroup staging_list by piece as stagings %}
+  <ul>
+    {% for staging in stagings %}
+      {% with staging.grouper as piece %}
+        <li>
+          <div><b>{{ piece }}</b></div>
+          <div>{{ piece.author }}, {{ piece.genre }}</div>
+          {% for item in staging.list %}
+            <span>{{ item.date|date:'d.m' }}</span>
+          {% endfor %}
+        </li>
+      {% endwith %}
+    {% empty %}
+      <li>Currently there are no available stagings.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

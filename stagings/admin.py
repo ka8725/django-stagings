@@ -6,10 +6,10 @@ class VacantZoneSeatInlice(admin.TabularInline):
   model = VacantZoneSeat
 
 class StagingAdmin(admin.ModelAdmin):
-  fields = ('piece', 'date', 'author', 'genre')
+  fields = ('piece', 'date')
   inlines = (VacantZoneSeatInlice, )
   list_filter = ('date',)
-  list_display = ('piece', 'author', 'genre', 'date')
+  list_display = ('piece', 'date')
 
 admin.site.register(Zone)
 admin.site.register(Author)
