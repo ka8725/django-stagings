@@ -17,6 +17,7 @@
     <ul>
       {% for vacancy in staging.vacantzoneseat_set.all %}
         <li>
+          {{ vacancy.zone }}
           {{ vacancy.zone.total_seats }}
           {{ vacancy.available_seats }}
         </li>
