@@ -48,6 +48,7 @@ class Staging(models.Model):
 class VacantZoneSeat(models.Model):
   zone = models.ForeignKey(Zone)
   staging = models.ForeignKey(Staging)
+  fee = models.PositiveSmallIntegerField()
   available_seats = models.PositiveSmallIntegerField()
 
   def clean(self):

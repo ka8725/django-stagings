@@ -1,0 +1,60 @@
+- model: stagings.zone
+  pk: 1
+  fields:
+    name: Green
+    total_seats: 10
+
+- model: stagings.zone
+  pk: 2
+  fields:
+    name: Red
+    total_seats: 20
+
+- model: stagings.author
+  pk: 1
+  fields:
+    name: Maxim Gorky
+
+- model: stagings.author
+  pk: 2
+  fields:
+    name: Nikolay Gogol
+
+- model: stagings.genre
+  pk: 1
+  fields:
+    name: Drama
+
+- model: stagings.genre
+  pk: 2
+  fields:
+    name: Comedy
+
+- model: stagings.piece
+  pk: 1
+  fields:
+    name: Dead souls
+    author: 1
+    genre: 2
+
+- model: stagings.staging
+  pk: 1
+  fields:
+    piece: 1
+    date: '2014-03-30'
+
+- model: stagings.vacantzoneseat
+  pk: 1
+  fields:
+    staging: 1
+    available_seats: 10
+    zone: 1
+    fee: 10
+
+- model: stagings.vacantzoneseat
+  pk: 2
+  fields:
+    staging: 1
+    available_seats: 20
+    zone: 2
+    fee: 10
