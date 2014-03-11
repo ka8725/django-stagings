@@ -1,0 +1,16 @@
+<header>
+  <div class='pull-left'>
+    <span><a href="{% url 'stagings:index' %}">Home</a></span>
+  </div>
+
+  <div class='pull-right'>
+    {% if user.is_authenticated %}
+      <span>Hello, {{user}}!</span>&nbsp;<span><a href="{% url 'logout' %}?next={% url 'stagings:index' %}">Logout</a></span>
+    {% else %}
+      <span><a href="{% url 'login' %}">Login</a></span>&nbsp;
+      <span><a href="{% url 'registration_register' %}">Register</a></span>
+    {% endif %}
+  </div>
+  <div class='clearfix'></div>
+  <hr />
+</header>

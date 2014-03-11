@@ -26,6 +26,15 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ACCOUNT_ACTIVATION_DAYS = 7
+AUTH_USER_EMAIL_UNIQUE = True
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'stagings@example.com'
+
 
 # Application definition
 
@@ -36,6 +45,7 @@ INSTALLED_APPS = (
   'django.contrib.sessions',
   'django.contrib.messages',
   'django.contrib.staticfiles',
+  'registration',
   'stagings',
   )
 
@@ -57,15 +67,15 @@ WSGI_APPLICATION = 'final.wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-'default': {
-'ENGINE': 'django.db.backends.postgresql_psycopg2',
-'NAME': 'final',
-'HOST': '127.0.0.1',
-'USERNAME': 'ka8725',
-'PORT': '5432',
-'PASSWORD': '',
-'ATOMIC_REQUEST': True,
-}
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': 'final',
+    'HOST': '127.0.0.1',
+    'USERNAME': 'ka8725',
+    'PORT': '5432',
+    'PASSWORD': '',
+    'ATOMIC_REQUEST': True,
+  }
 }
 
 # Internationalization
@@ -90,3 +100,5 @@ STATIC_URL = '/static/'
 TEMPLATE_DIRS = (
   os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
 )
+
+LOGIN_REDIRECT_URL = '/'
