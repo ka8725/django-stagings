@@ -1,6 +1,7 @@
 {% extends 'stagings/base.html' %}
 
 {% block content %}
+  <h1>Available stagings</h1>
   {% regroup staging_list by piece as stagings %}
   <ul>
     {% for staging in stagings %}
@@ -9,7 +10,13 @@
           <div><b>{{ piece }}</b></div>
           <div>{{ piece.author }}, {{ piece.genre }}</div>
           {% for item in staging.list %}
-            <span>{{ item.date|date:'d.m' }}</span>
+            <span>
+              {% if item.is_past %}
+                {{ item.date|date:'d.m' }}
+              {% else %}
+                <a href="{% url 'stagings:detail' item.id %}">{{ item.date|date:'d.m' }}</a>
+              {% endif %}
+            </span>
           {% endfor %}
         </li>
       {% endwith %}

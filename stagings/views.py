@@ -5,3 +5,7 @@ from stagings.models import Staging
 
 class IndexView(generic.ListView):
   model = Staging
+
+
+class StagingDetailView(generic.DetailView):
+  model = Staging

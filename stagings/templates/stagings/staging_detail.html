@@ -1,0 +1,28 @@
+{% extends 'stagings/base.html' %}
+
+{% block content %}
+  <h1>{{ staging.piece }}</h1>
+  <dl>
+    <dt>Author:</dt>
+      <dd>{{ staging.piece.author }}</dd>
+
+    <dt>Genre:</dt>
+      <dd>{{ staging.piece.genre }}</dd>
+
+    <dt>Date:</dt>
+      <dd>{{ staging.date }}</dd>
+  </dl>
+
+  <div class='vacant-seats'>
+    <ul>
+      {% for vacancy in staging.vacantzoneseat_set.all %}
+        <li>
+          {{ vacancy.zone.total_seats }}
+          {{ vacancy.available_seats }}
+        </li>
+      {% empty %}
+        <li>There are no available vacant seats.</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
