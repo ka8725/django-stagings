@@ -35,7 +35,6 @@ EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = 'stagings@example.com'
 
-
 # Application definition
 
 INSTALLED_APPS = (

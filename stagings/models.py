@@ -1,6 +1,8 @@
 from django.db import models
 from datetime import date
 from django.core.exceptions import ValidationError
+from django.utils.functional import cached_property
+from django.contrib.auth.models import User
 
 
 class Author(models.Model):
@@ -41,6 +43,10 @@ class Staging(models.Model):
   def is_past(self):
     return self.date < date.today()
 
+  @cached_property
+  def zones(self):
+    return self.vacantzoneseat_set.all()
+
   def __unicode__(self):
     return '%s: %s' % (self.piece.name, self.date)
 
@@ -60,3 +66,17 @@ class VacantZoneSeat(models.Model):
 
     if self.available_seats > self.zone.total_seats:
       raise ValidationError('Available seats can not be greater than total seats for zone.')
+
+  def __unicode__(self):
+    return self.zone
+
+
+class Order(models.Model):
+  user = models.ForeignKey(User)
+  total = models.PositiveSmallIntegerField()
+
+
+class LineItem(models.Model):
+  order = models.ForeignKey(Order)
+  quantity = models.PositiveSmallIntegerField()
+  zone = models.ForeignKey(VacantZoneSeat)
