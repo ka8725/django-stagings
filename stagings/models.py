@@ -57,6 +57,9 @@ class VacantZoneSeat(models.Model):
   ticket_price = models.PositiveSmallIntegerField()
   available_seats = models.PositiveSmallIntegerField()
 
+  def total_seats(self):
+    return self.zone.total_seats
+
   def clean(self):
     if not self.available_seats and self.zone:
       self.available_seats = self.zone.total_seats
