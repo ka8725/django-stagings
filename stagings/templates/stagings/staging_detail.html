@@ -14,16 +14,30 @@
   </dl>
 
   <div class='vacant-seats'>
-    <ul>
-      {% for vacancy in staging.vacantzoneseat_set.all %}
-        <li>
-          {{ vacancy.zone }}
-          {{ vacancy.zone.total_seats }}
-          {{ vacancy.available_seats }}
-        </li>
-      {% empty %}
-        <li>There are no available vacant seats.</li>
-      {% endfor %}
-    </ul>
+    <h2>Tickets</h2>
+    {% if staging.vacantzoneseat_set.all %}
+      <table>
+        <thead>
+          <tr>
+            <th>Zone</th>
+            <th>Total seats</th>
+            <th>Available seats</th>
+            <th>Ticket price, BYR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for vacancy in staging.vacantzoneseat_set.all %}
+            <tr>
+              <td>{{ vacancy.zone }}</td>
+              <td>{{ vacancy.zone.total_seats }}</td>
+              <td>{{ vacancy.available_seats }}</td>
+              <td>{{ vacancy.ticket_price }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>There are no available vacant seats.</p>
+    {% endif %}
   </div>
 {% endblock %}
