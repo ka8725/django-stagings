@@ -15,27 +15,36 @@
 
   <div class='vacant-seats'>
     <h2>Tickets</h2>
-    {% if staging.zones %}
-      <table>
-        <thead>
-          <tr>
-            <th>Zone</th>
-            <th>Total seats</th>
-            <th>Available seats</th>
-            <th>Ticket price, BYR</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for zone in staging.zones %}
+
+    {% if order_form.forms %}
+      <form method='POST'>
+        {% csrf_token %}
+        <table>
+          <thead>
             <tr>
-              <td>{{ zone }}</td>
-              <td>{{ zone.total_seats }}</td>
-              <td>{{ zone.available_seats }}</td>
-              <td>{{ zone.ticket_price }}</td>
+              <th>Zone</th>
+              <th>Total seats</th>
+              <th>Available seats</th>
+              <th>Ticket price, BYR</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for form in order_form.forms %}
+              <tr>
+                <td>{{ form.instance.zone }}</td>
+                <td>{{ form.instance.zone.total_seats }}</td>
+                <td>{{ form.instance.zone.available_seats }}</td>
+                <td>{{ form.instance.zone.ticket_price }}</td>
+                <td>
+                  {{ form.zone.as_hidden }}
+                  {{ form.quantity }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <input type='submit' value='Order'></input>
+      </form>
     {% else %}
       <p>There are no available vacant seats.</p>
     {% endif %}
