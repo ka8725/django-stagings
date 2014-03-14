@@ -1,5 +1,5 @@
 from django.contrib import admin
-from stagings.models import Zone, Author, Genre, Staging, Piece, StagingZone
+from stagings.models import Zone, Author, Genre, Staging, Piece, StagingZone, Order
 
 
 class StagingZoneInlice(admin.TabularInline):
@@ -12,6 +12,7 @@ class StagingAdmin(admin.ModelAdmin):
   list_display = ('piece', 'date')
 
 admin.site.register(Zone)
+admin.site.register(Order)
 admin.site.register(Author)
 admin.site.register(Genre)
 admin.site.register(Piece)

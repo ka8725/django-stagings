@@ -16,8 +16,9 @@
   <div class='vacant-seats'>
     <h2>Tickets</h2>
 
-    {% if order_form.forms %}
-      <form method='POST'>
+    {% if form.forms %}
+      <form action="{% url 'stagings:create_order' %}" method='POST'>
+        {{ form.management_form }}
         {% csrf_token %}
         <table>
           <thead>
@@ -29,7 +30,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for form in order_form.forms %}
+            {% for form in form.forms %}
               <tr>
                 <td>{{ form.instance.zone }}</td>
                 <td>{{ form.instance.zone.total_seats }}</td>
@@ -38,6 +39,7 @@
                 <td>
                   {{ form.zone.as_hidden }}
                   {{ form.quantity }}
+                  {{ form.quantity.errors }}
                 </td>
               </tr>
             {% endfor %}
