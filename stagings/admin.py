@@ -1,13 +1,13 @@
 from django.contrib import admin
-from stagings.models import Zone, Author, Genre, Staging, Piece, VacantZoneSeat
+from stagings.models import Zone, Author, Genre, Staging, Piece, StagingZone
 
 
-class VacantZoneSeatInlice(admin.TabularInline):
-  model = VacantZoneSeat
+class StagingZoneInlice(admin.TabularInline):
+  model = StagingZone
 
 class StagingAdmin(admin.ModelAdmin):
   fields = ('piece', 'date')
-  inlines = (VacantZoneSeatInlice, )
+  inlines = (StagingZoneInlice, )
   list_filter = ('date',)
   list_display = ('piece', 'date')
 

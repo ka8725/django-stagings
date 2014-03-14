@@ -45,13 +45,13 @@ class Staging(models.Model):
 
   @cached_property
   def zones(self):
-    return self.vacantzoneseat_set.all()
+    return self.stagingzone_set.all()
 
   def __unicode__(self):
     return '%s: %s' % (self.piece.name, self.date)
 
 
-class VacantZoneSeat(models.Model):
+class StagingZone(models.Model):
   zone = models.ForeignKey(Zone)
   staging = models.ForeignKey(Staging)
   ticket_price = models.PositiveSmallIntegerField()
@@ -82,4 +82,4 @@ class Order(models.Model):
 class LineItem(models.Model):
   order = models.ForeignKey(Order)
   quantity = models.PositiveSmallIntegerField()
-  zone = models.ForeignKey(VacantZoneSeat)
+  zone = models.ForeignKey(StagingZone)

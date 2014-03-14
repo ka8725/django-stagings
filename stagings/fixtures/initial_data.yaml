@@ -43,7 +43,7 @@
     piece: 1
     date: '2014-03-30'
 
-- model: stagings.vacantzoneseat
+- model: stagings.stagingzone
   pk: 1
   fields:
     staging: 1
@@ -51,7 +51,7 @@
     zone: 1
     ticket_price: 10
 
-- model: stagings.vacantzoneseat
+- model: stagings.stagingzone
   pk: 2
   fields:
     staging: 1
