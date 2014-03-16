@@ -16,37 +16,27 @@
   <div class='vacant-seats'>
     <h2>Tickets</h2>
 
-    {% if form.forms %}
-      <form action="{% url 'stagings:create_order' %}" method='POST'>
-        {{ form.management_form }}
-        {% csrf_token %}
-        <table>
-          <thead>
+    {% if staging.zones %}
+      <table>
+        <thead>
+          <tr>
+            <th>Zone</th>
+            <th>Total seats</th>
+            <th>Available seats</th>
+            <th>Ticket price, BYR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for zone in staging.zones %}
             <tr>
-              <th>Zone</th>
-              <th>Total seats</th>
-              <th>Available seats</th>
-              <th>Ticket price, BYR</th>
+              <td>{{ zone }}</td>
+              <td>{{ zone.total_seats }}</td>
+              <td>{{ zone.available_seats }}</td>
+              <td>{{ zone.ticket_price }}</td>
             </tr>
-          </thead>
-          <tbody>
-            {% for form in form.forms %}
-              <tr>
-                <td>{{ form.instance.zone }}</td>
-                <td>{{ form.instance.zone.total_seats }}</td>
-                <td>{{ form.instance.zone.available_seats }}</td>
-                <td>{{ form.instance.zone.ticket_price }}</td>
-                <td>
-                  {{ form.zone.as_hidden }}
-                  {{ form.quantity }}
-                  {{ form.quantity.errors }}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <input type='submit' value='Order'></input>
-      </form>
+          {% endfor %}
+        </tbody>
+      </table>
     {% else %}
       <p>There are no available vacant seats.</p>
     {% endif %}

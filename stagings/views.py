@@ -13,23 +13,55 @@ class IndexView(generic.ListView):
 class StagingDetailView(generic.DetailView):
   model = Staging
 
-  def get_context_data(self, **kwargs):
-    staging = self.get_object()
-    self.OrderForm = inlineformset_factory(
-      Order,
-      LineItem,
-      extra=len(staging.zones),
-    )
-    formset = self.OrderForm()
-
-    for subform, zone in zip(formset.forms, staging.zones):
-      subform.initial = {'zone': zone}
-      subform.instance.zone = zone
-
-    context = {'form': formset}
-    return super(StagingDetailView, self).get_context_data(**context)
-
 
 class CreateOrderView(generic.CreateView):
-  template_name = 'stagings/staging_detail.html'
-  form_class = OrderForm
+  model = Order
+
+  @property
+  def count_zones(self):
+    return len(self.staging.zones)
+
+  @property
+  def staging(self):
+    return Staging.objects.get(pk=self.kwargs.get(self.pk_url_kwarg, None))
+
+  @property
+  def zones(self):
+    return self.staging.zones
+
+  def get_form_class(self):
+    return inlineformset_factory(
+      Order,
+      LineItem,
+      extra=self.count_zones,
+      max_num=self.count_zones,
+      can_order=False,
+      can_delete=False,
+    )
+
+  def get_form(self, form_class):
+    formset = None
+    if self.request.method == 'GET':
+      formset = form_class()
+      for subform, zone in zip(formset.forms, self.zones):
+        subform.initial = {'zone': zone}
+        subform.instance.zone = zone
+    elif self.request.method == 'POST':
+      formset = super(CreateOrderView, self).get_form(form_class)
+    return formset
+
+  def get_success_url(self):
+    return reverse('stagings:index')
+
+  def form_valid(self, formset):
+    line_items = (subform.instance for subform in formset.forms)
+    order_total = sum(line_item.total for line_item in line_items)
+    formset.instance = Order.objects.create(
+      user=self.request.user,
+      total=order_total
+    )
+    return super(CreateOrderView, self).form_valid(formset)
+
+  def get_context_data(self, **kwargs):
+    kwargs['staging'] = self.staging
+    return kwargs

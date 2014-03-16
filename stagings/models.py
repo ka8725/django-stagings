@@ -83,3 +83,7 @@ class LineItem(models.Model):
   order = models.ForeignKey(Order)
   quantity = models.PositiveSmallIntegerField()
   zone = models.ForeignKey(StagingZone)
+
+  @property
+  def total(self):
+    return self.quantity * self.zone.ticket_price

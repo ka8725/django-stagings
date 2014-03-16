@@ -14,7 +14,7 @@
               {% if item.is_past %}
                 {{ item.date|date:'d.m' }}
               {% else %}
-                <a href="{% url 'stagings:detail' item.id %}">{{ item.date|date:'d.m' }}</a>
+                <a href="{% url 'stagings:create_order' item.id %}">{{ item.date|date:'d.m' }}</a>
               {% endif %}
             </span>
           {% endfor %}
