@@ -18,7 +18,7 @@ class OrderLineFormSet(BaseInlineFormSet):
       if new_available_seats < 0:
         raise forms.ValidationError('Quantity must be less than available seats number.')
 
-    if order_total < 0:
-      raise forms.ValidationError('Order total must not be negative number.')
+    if order_total <= 0:
+      raise forms.ValidationError('Order total must be positive number.')
 
     self.order_total = order_total

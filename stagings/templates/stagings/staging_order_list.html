@@ -1,0 +1,45 @@
+{% extends 'stagings/base.html' %}
+
+{% block content %}
+  {% include 'stagings/_staging_detail.html' %}
+
+  {% if order_list %}
+    <form method='POST'>
+      {% csrf_token %}
+      <table border='1'>
+        <head>
+          <tr>
+            <th></th>
+            <th>User</th>
+            <th>Date</th>
+            <th>Details</th>
+            <th>Total</th>
+          </tr>
+        </head>
+        <tbody>
+          {% for order in order_list %}
+            <tr>
+              <td>
+                <input type='checkbox' name='order_ids' value='{{ order.id }}'/>
+              </td>
+              <td>{{ order.user }}</td>
+              <td>{{ order.date|date:'d.m' }}</td>
+              <td>
+                {% for line_item in order.lineitem_set.all %}
+                  {{ line_item }}<br/>
+                {% endfor %}
+              </td>
+              <td>{{ order.total }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </form>
+    <div class='form-actions'>
+      <a href="{% url 'stagings:pay_orders' %}" class='action-link'>Pay</a>
+      <a href="{% url 'stagings:cancel_orders' %}" class='action-link'>Cancel</a>
+    </div>
+  {% else %}
+    There were not created orders for this staging.
+  {% endif %}
+{% endblock %}

@@ -66,6 +66,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   'django.core.context_processors.tz',
   'django.contrib.messages.context_processors.messages',
   'stagings.context_processors.last_commit_date',
+  'stagings.context_processors.is_courier',
   )
 
 ROOT_URLCONF = 'final.urls'

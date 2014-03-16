@@ -1,5 +1,6 @@
 from django import template
 from stagings import models
+from stagings import constants
 
 register = template.Library()
 
@@ -24,7 +25,13 @@ def paid_tickets_sum(user, zones):
   return _tickets_sum(user, zones, models.Order.PAID)
 
 
+@register.filter
+def is_courier(user):
+  return user.groups.filter(name=constants.COURIERS_GROUP)
+
+
 def _seats_for_zone(user, staging_zone, status):
+  # TODO: rework for joins to get rid of possible performance issues
   orders = models.Order.objects.filter(user=user, status=status).all()
   line_items = models.LineItem.objects.filter(
     zone=staging_zone.zone,
@@ -34,6 +41,7 @@ def _seats_for_zone(user, staging_zone, status):
 
 
 def _tickets_sum(user, zones, status):
+  # TODO: rework for joins to get rid of possible performance issues
   orders = models.Order.objects.filter(user=user, status=status).all()
   line_items = models.LineItem.objects.filter(
     zone__in=zones,

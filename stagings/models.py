@@ -86,6 +86,17 @@ class Order(models.Model):
   user = models.ForeignKey(User)
   total = models.PositiveSmallIntegerField()
   status = models.PositiveSmallIntegerField(choices=STATUSES, default=NEW)
+  date = models.DateField()
+
+  def cancel(self):
+    for line_item in self.lineitem_set.all():
+      line_item.zone.available_seats += line_item.quantity
+      line_item.zone.save()
+    self.delete()
+
+  def pay(self):
+    self.status = self.PAID
+    self.save()
 
 
 class LineItem(models.Model):
@@ -99,3 +110,6 @@ class LineItem(models.Model):
     if self.quantity:
       quantity = self.quantity
     return quantity * self.zone.ticket_price
+
+  def __unicode__(self):
+    return '%s - %s' % (self.zone.zone, self.quantity)

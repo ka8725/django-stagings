@@ -14,7 +14,11 @@
               {% if item.is_past %}
                 {{ item.date|date:'d.m' }}
               {% elif user.is_authenticated %}
-                <a href="{% url 'stagings:create_order' item.id %}">{{ item.date|date:'d.m' }}</a>
+                {% if is_courier %}
+                  <a href="{% url 'stagings:staging_orders' item.id %}">{{ item.date|date:'d.m' }}</a>
+                {% else %}
+                  <a href="{% url 'stagings:create_order' item.id %}">{{ item.date|date:'d.m' }}</a>
+                {% endif %}
               {% else %}
                 <a href="{% url 'stagings:detail' item.id %}">{{ item.date|date:'d.m' }}</a>
               {% endif %}

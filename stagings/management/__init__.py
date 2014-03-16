@@ -1,6 +1,6 @@
 from django.db.models.signals import post_syncdb
 from stagings import constants, models
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group, Permission, User
 from django.contrib.contenttypes.models import ContentType
 
 def set_groups_and_pepermissions(**kwargs):
@@ -46,6 +46,5 @@ def set_groups_and_pepermissions(**kwargs):
     delete_order_permission,
     change_order_permission,
   )
-
 
 post_syncdb.connect(set_groups_and_pepermissions)

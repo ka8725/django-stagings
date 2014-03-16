@@ -1,31 +1,55 @@
+from django.views.decorators.csrf import csrf_protect
+from datetime import date
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.views import generic
 from django.forms.models import inlineformset_factory
 from django.core.urlresolvers import reverse
-from stagings.models import Staging, Order, LineItem
+from stagings.models import Staging, Order, LineItem, StagingZone
 from stagings.forms import OrderLineFormSet
+
+
+class BelongsToStaging(object):
+  @property
+  def staging(self):
+    return Staging.objects.get(pk=self.kwargs.get(self.pk_url_kwarg, None))
+
+  def get_context_data(self, **kwargs):
+    context = super(BelongsToStaging, self).get_context_data(**kwargs)
+    context['staging'] = self.staging
+    return context
 
 
 class IndexView(generic.ListView):
   model = Staging
 
 
+class StagingOrdersView(BelongsToStaging, generic.ListView):
+  model = Order
+  template_name = 'stagings/staging_order_list.html'
+  pk_url_kwarg = 'pk'
+
+  def get_queryset(self):
+    # TODO: rework for joins to get rid of possible performance issues
+    staging_zones = StagingZone.objects.filter(staging=self.staging)
+    line_items = LineItem.objects.filter(zone__in=staging_zones)
+    order_ids = [line_item.order_id for line_item in line_items]
+    orders = super(StagingOrdersView, self).get_queryset()
+    orders = orders.filter(id__in=order_ids, status=Order.NEW)
+    return orders
+
+
 class StagingDetailView(generic.DetailView):
   model = Staging
 
 
-class CreateOrderView(generic.CreateView):
+class CreateOrderView(BelongsToStaging, generic.CreateView):
   model = Order
 
   @property
   def available_zones_number(self):
     return len([zone for zone in self.staging.zones
       if zone.available_seats > 0])
-
-  @property
-  def staging(self):
-    return Staging.objects.get(pk=self.kwargs.get(self.pk_url_kwarg, None))
 
   @property
   def zones(self):
@@ -59,19 +83,34 @@ class CreateOrderView(generic.CreateView):
   def form_valid(self, formset):
     formset.instance = Order.objects.create(
       user=self.request.user,
-      total=formset.order_total
+      total=formset.order_total,
+      date=date.today(),
     )
 
     for form in formset:
       zone = form.instance.zone
-      zone.available_seats = formset.new_numbers_for_available_seats[zone.id]
-      zone.save()
+      new_available_seats = formset.new_numbers_for_available_seats.get(zone.id, None)
+      if new_available_seats:
+        zone.available_seats = new_available_seats
+        zone.save()
 
     messages.success(self.request,
       """You have just ordered the tickets successfully.
       Wait for courier's approval.""")
     return super(CreateOrderView, self).form_valid(formset)
 
-  def get_context_data(self, **kwargs):
-    kwargs['staging'] = self.staging
-    return kwargs
+
+@csrf_protect
+def cancel_orders(request):
+  return _process_orders(request, lambda x: x.cancel())
+
+
+@csrf_protect
+def pay_orders(request):
+  return _process_orders(request, lambda x: x.pay())
+
+
+def _process_orders(req, command):
+  order_ids = req.POST.getlist('order_ids')
+  map(command, Order.objects.filter(id__in=order_ids))
+  return redirect(reverse('stagings:index'))

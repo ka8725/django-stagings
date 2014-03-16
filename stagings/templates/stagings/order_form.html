@@ -2,17 +2,7 @@
 {% load stagings_extras %}
 
 {% block content %}
-  <h1>{{ staging.piece }}</h1>
-  <dl>
-    <dt>Author:</dt>
-      <dd>{{ staging.piece.author }}</dd>
-
-    <dt>Genre:</dt>
-      <dd>{{ staging.piece.genre }}</dd>
-
-    <dt>Date:</dt>
-      <dd>{{ staging.date }}</dd>
-  </dl>
+  {% include 'stagings/_staging_detail.html' %}
 
   <div class='vacant-seats'>
     <h2>Tickets</h2>
@@ -22,7 +12,7 @@
         {{ form.management_form }}
         {{ form.staging }}
         {% csrf_token %}
-        <table>
+        <table border='1'>
           <thead>
             <tr>
               <th>Zone</th>
@@ -31,6 +21,7 @@
               <th>Available seats</th>
               <th>Paid</th>
               <th>Ordered</th>
+              <th>Quantity</th>
             </tr>
           </thead>
           <tfoot>
