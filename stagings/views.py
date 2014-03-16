@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.views import generic
 from django.forms.models import inlineformset_factory
 from django.core.urlresolvers import reverse
@@ -60,6 +61,9 @@ class CreateOrderView(generic.CreateView):
       user=self.request.user,
       total=order_total
     )
+    messages.success(self.request,
+      """You have just ordered the tickets successfully.
+      Wait for courier's approval.""")
     return super(CreateOrderView, self).form_valid(formset)
 
   def get_context_data(self, **kwargs):
