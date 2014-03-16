@@ -4,7 +4,7 @@ from django.views import generic
 from django.forms.models import inlineformset_factory
 from django.core.urlresolvers import reverse
 from stagings.models import Staging, Order, LineItem
-from stagings.forms import OrderForm
+from stagings.forms import OrderLineFormSet
 
 
 class IndexView(generic.ListView):
@@ -19,8 +19,9 @@ class CreateOrderView(generic.CreateView):
   model = Order
 
   @property
-  def count_zones(self):
-    return len(self.staging.zones)
+  def available_zones_number(self):
+    return len([zone for zone in self.staging.zones
+      if zone.available_seats > 0])
 
   @property
   def staging(self):
@@ -34,8 +35,9 @@ class CreateOrderView(generic.CreateView):
     return inlineformset_factory(
       Order,
       LineItem,
-      extra=self.count_zones,
-      max_num=self.count_zones,
+      formset=OrderLineFormSet,
+      extra=self.available_zones_number,
+      max_num=self.available_zones_number,
       can_order=False,
       can_delete=False,
     )
@@ -55,12 +57,16 @@ class CreateOrderView(generic.CreateView):
     return reverse('stagings:index')
 
   def form_valid(self, formset):
-    line_items = (subform.instance for subform in formset.forms)
-    order_total = sum(line_item.total for line_item in line_items)
     formset.instance = Order.objects.create(
       user=self.request.user,
-      total=order_total
+      total=formset.order_total
     )
+
+    for form in formset:
+      zone = form.instance.zone
+      zone.available_seats = formset.new_numbers_for_available_seats[zone.id]
+      zone.save()
+
     messages.success(self.request,
       """You have just ordered the tickets successfully.
       Wait for courier's approval.""")

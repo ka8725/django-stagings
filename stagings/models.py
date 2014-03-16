@@ -57,12 +57,13 @@ class StagingZone(models.Model):
   ticket_price = models.PositiveSmallIntegerField()
   available_seats = models.PositiveSmallIntegerField()
 
+  @property
   def total_seats(self):
     return self.zone.total_seats
 
   def clean(self):
     if not self.available_seats and self.zone:
-      self.available_seats = self.zone.total_seats
+      self.available_seats = self.total_seats
 
     if self.available_seats < 0:
       raise ValidationError('Available seats can not be negative number.')
@@ -86,4 +87,7 @@ class LineItem(models.Model):
 
   @property
   def total(self):
-    return self.quantity * self.zone.ticket_price
+    quantity = 0
+    if self.quantity:
+      quantity = self.quantity
+    return quantity * self.zone.ticket_price
