@@ -13,8 +13,10 @@
             <span>
               {% if item.is_past %}
                 {{ item.date|date:'d.m' }}
-              {% else %}
+              {% elif user.is_authenticated %}
                 <a href="{% url 'stagings:create_order' item.id %}">{{ item.date|date:'d.m' }}</a>
+              {% else %}
+                <a href="{% url 'stagings:detail' item.id %}">{{ item.date|date:'d.m' }}</a>
               {% endif %}
             </span>
           {% endfor %}
