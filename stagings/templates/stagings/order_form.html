@@ -1,4 +1,5 @@
 {% extends 'stagings/base.html' %}
+{% load stagings_extras %}
 
 {% block content %}
   <h1>{{ staging.piece }}</h1>
@@ -25,24 +26,38 @@
           <thead>
             <tr>
               <th>Zone</th>
+              <th>Ticket price</th>
               <th>Total seats</th>
               <th>Available seats</th>
-              <th>Ticket price, BYR</th>
+              <th>Paid</th>
+              <th>Ordered</th>
             </tr>
           </thead>
+          <tfoot>
+            <tr>
+              <th align='left' colspan='4'>Sum</th>
+              <th align='left'>{{ user|paid_tickets_sum:staging.zones }}</th>
+              <th align='left'>{{ user|ordered_tickets_sum:staging.zones }}</th>
+              <th></th>
+            </tr>
+          </tfoot>
           <tbody>
             {% for form in form.forms %}
-              <tr>
-                <td>{{ form.instance.zone }}</td>
-                <td>{{ form.instance.zone.total_seats }}</td>
-                <td>{{ form.instance.zone.available_seats }}</td>
-                <td>{{ form.instance.zone.ticket_price }}</td>
-                <td>
-                  {{ form.zone.as_hidden }}
-                  {{ form.quantity }}
-                  {{ form.quantity.errors }}
-                </td>
-              </tr>
+              {% with zone=form.instance.zone %}
+                <tr>
+                  <td>{{ zone }}</td>
+                  <td>{{ zone.ticket_price }}</td>
+                  <td>{{ zone.total_seats }}</td>
+                  <td>{{ zone.available_seats }}</td>
+                  <td>{{ user|paid_seats_for_zone:zone }}</td>
+                  <td>{{ user|ordered_seats_for_zone:zone }}</td>
+                  <td>
+                    {{ form.zone.as_hidden }}
+                    {{ form.quantity }}
+                    {{ form.quantity.errors }}
+                  </td>
+                </tr>
+              {% endwith %}
             {% endfor %}
           </tbody>
         </table>

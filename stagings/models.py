@@ -76,8 +76,16 @@ class StagingZone(models.Model):
 
 
 class Order(models.Model):
+  NEW = 0
+  PAID = 1
+  STATUSES = (
+    (NEW, 'New'),
+    (PAID, 'Paid')
+  )
+
   user = models.ForeignKey(User)
   total = models.PositiveSmallIntegerField()
+  status = models.PositiveSmallIntegerField(choices=STATUSES, default=NEW)
 
 
 class LineItem(models.Model):
