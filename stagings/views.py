@@ -13,10 +13,12 @@ from stagings.decorators import group_required
 
 
 class BelongsToStagingMixin(object):
+  staging_pk_url_kwarg = 'staging_pk'
 
   @property
   def staging(self):
-    return Staging.objects.get(pk=self.kwargs.get(self.pk_url_kwarg, None))
+    staging_id = self.kwargs.get(self.staging_pk_url_kwarg)
+    return Staging.objects.get(pk=staging_id)
 
   def get_context_data(self, **kwargs):
     context = super(BelongsToStagingMixin, self).get_context_data(**kwargs)
