@@ -30,6 +30,26 @@ class IndexView(generic.ListView):
   model = Staging
 
 
+class StagingDetailView(generic.DetailView):
+  model = Staging
+
+
+class OrderConfirmationView(BelongsToStagingMixin, generic.DetailView):
+  group_required = constants.CLIENTS_GROUP
+  model = Order
+
+
+class CancelOrderView(generic.DeleteView):
+  group_required = constants.CLIENTS_GROUP
+  model = Order
+
+  def get_queryset(self):
+    return Order.objects.filter(user=self.request.user)
+
+  def get_success_url(self):
+    return reverse('stagings:index')
+
+
 class StagingOrdersView(GroupRequiredMixin,
                         BelongsToStagingMixin,
                         generic.ListView):
@@ -48,10 +68,6 @@ class StagingOrdersView(GroupRequiredMixin,
     return orders
 
 
-class StagingDetailView(generic.DetailView):
-  model = Staging
-
-
 class CreateOrderView(GroupRequiredMixin,
                       BelongsToStagingMixin,
                       generic.CreateView):
@@ -60,12 +76,12 @@ class CreateOrderView(GroupRequiredMixin,
 
   @property
   def available_zones_number(self):
-    return len([zone for zone in self.staging.zones
-      if zone.available_seats > 0])
+    return len(self.zones)
 
   @property
   def zones(self):
-    return self.staging.zones
+    return [zone for zone in self.staging.zones
+                  if zone.available_seats > 0]
 
   def get_form_class(self):
     return inlineformset_factory(
@@ -90,32 +106,29 @@ class CreateOrderView(GroupRequiredMixin,
     return formset
 
   def get_success_url(self):
-    return reverse('stagings:index')
+    order_confirmation_path = reverse('stagings:order_confirmation',
+                                      args=[self.staging.id, self.order.id])
+    return order_confirmation_path
 
   def form_valid(self, formset):
-    formset.instance = Order.objects.create(
+    self.order = Order.objects.create(
       user=self.request.user,
       total=formset.order_total,
       date=date.today(),
     )
+    formset.instance = self.order
 
     for form in formset:
       zone = form.instance.zone
-      new_available_seats = formset.new_numbers_for_available_seats.get(zone.id, None)
-      if new_available_seats:
-        zone.available_seats = new_available_seats
-        zone.save()
-
-    messages.success(self.request,
-      """You have just ordered the tickets successfully.
-      Wait for courier's approval.""")
+      zone.available_seats = formset.new_zone_available_seats.get(zone.id, None)
+      zone.save()
     return super(CreateOrderView, self).form_valid(formset)
 
 
 @csrf_protect
 @group_required(constants.COURIERS_GROUP)
 def cancel_orders(request):
-  return _process_orders(request, lambda x: x.cancel())
+  return _process_orders(request, lambda x: x.delete())
 
 
 @csrf_protect
@@ -124,7 +137,11 @@ def pay_orders(request):
   return _process_orders(request, lambda x: x.pay())
 
 
-def _process_orders(req, command):
-  order_ids = req.POST.getlist('order_ids')
+def _process_orders(request, command):
+  order_ids = request.POST.getlist('order_ids')
   map(command, Order.objects.filter(id__in=order_ids))
-  return redirect(reverse('stagings:index'))
+  return redirect(_back_path(request))
+
+
+def _back_path(request):
+  return request.META.get('HTTP_REFERER') or reverse('stagings:index')

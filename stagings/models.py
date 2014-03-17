@@ -88,28 +88,28 @@ class Order(models.Model):
   status = models.PositiveSmallIntegerField(choices=STATUSES, default=NEW)
   date = models.DateField()
 
-  def cancel(self):
-    for line_item in self.lineitem_set.all():
-      line_item.zone.available_seats += line_item.quantity
-      line_item.zone.save()
-    self.delete()
+  def delete(self):
+    self._revert_zone_seats()
+    super(Order, self).delete()
 
   def pay(self):
     self.status = self.PAID
     self.save()
 
+  def _revert_zone_seats(self):
+    for line_item in self.lineitem_set.all():
+      line_item.zone.available_seats += line_item.quantity
+      line_item.zone.save()
+
 
 class LineItem(models.Model):
   order = models.ForeignKey(Order)
-  quantity = models.PositiveSmallIntegerField()
+  quantity = models.PositiveSmallIntegerField(default=0)
   zone = models.ForeignKey(StagingZone)
 
   @property
   def total(self):
-    quantity = 0
-    if self.quantity:
-      quantity = self.quantity
-    return quantity * self.zone.ticket_price
+    return (self.quantity or 0) * self.zone.ticket_price
 
   def __unicode__(self):
     return '%s - %s' % (self.zone.zone, self.quantity)

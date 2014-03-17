@@ -3,6 +3,8 @@ from stagings.views import (IndexView,
                             CreateOrderView,
                             StagingDetailView,
                             StagingOrdersView,
+                            OrderConfirmationView,
+                            CancelOrderView,
                             pay_orders,
                             cancel_orders)
 
@@ -23,9 +25,13 @@ urlpatterns = patterns('',
     StagingOrdersView.as_view(),
     name='staging_orders'),
 
-  # url(r'^(?P<staging_pk>\d+)/orders/(?P<staging_pk>\d+)$',
-  #   StagingOrdersView.as_view(),
-  #   name='staging_orders'),
+  url(r'^(?P<staging_pk>\d+)/orders/(?P<pk>\d+)$',
+    OrderConfirmationView.as_view(),
+    name='order_confirmation'),
+
+  url(r'^orders/(?P<pk>\d+)$',
+    CancelOrderView.as_view(),
+    name='cancel_order'),
 
   url(r'^cancel_orders$',
     cancel_orders,

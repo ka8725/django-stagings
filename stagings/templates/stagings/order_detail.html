@@ -1,0 +1,44 @@
+{% extends 'stagings/base.html' %}
+{% load stagings_extras %}
+
+{% block content %}
+  {% include 'stagings/_staging_detail.html' %}
+
+  <table>
+    <thead>
+      <tr>
+        <th>Zone</th>
+        <th>Ticket price</th>
+        <th>Total seats</th>
+        <th>Available seats</th>
+        <th>Ordered</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th align='left' colspan='4'>Sum</th>
+        <th align='left'>{{ order.total }}</th>
+      </tr>
+    </tfoot>
+    <tbody>
+      {% for line_item in order.lineitem_set.all %}
+        {% with zone=line_item.zone %}
+          <tr>
+            <td>{{ zone }}</td>
+            <td>{{ zone.ticket_price }}</td>
+            <td>{{ zone.total_seats }}</td>
+            <td>{{ zone.available_seats }}</td>
+            <td>{{ line_item.quantity }}</td>
+          </tr>
+        {% endwith %}
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class='form-actions'>
+    <form action="{% url 'stagings:cancel_order' order.id %}" method='POST'>
+      {% csrf_token %}
+      <a href="{% url 'stagings:index' %}">Confirm order</a>
+      <input type='submit' value='Cancel order' />
+    </form>
+  </div>
+{% endblock %}

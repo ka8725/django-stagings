@@ -10,7 +10,6 @@
     {% if form.forms %}
       <form action="{% url 'stagings:create_order' staging.id %}" method='POST'>
         {{ form.management_form }}
-        {{ form.staging }}
         {% csrf_token %}
         <table>
           <thead>
@@ -34,6 +33,7 @@
           </tfoot>
           <tbody>
             {% for form in form.forms %}
+              {{ form.non_field_errors }}
               {% with zone=form.instance.zone %}
                 <tr>
                   <td>{{ zone }}</td>

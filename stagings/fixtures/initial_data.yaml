@@ -1,13 +1,13 @@
 - model: stagings.zone
   pk: 1
   fields:
-    name: Green
+    name: VIP
     total_seats: 10
 
 - model: stagings.zone
   pk: 2
   fields:
-    name: Red
+    name: General
     total_seats: 20
 
 - model: stagings.author
@@ -49,7 +49,7 @@
     staging: 1
     available_seats: 10
     zone: 1
-    ticket_price: 10
+    ticket_price: 20
 
 - model: stagings.stagingzone
   pk: 2

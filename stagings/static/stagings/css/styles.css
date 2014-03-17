@@ -10,6 +10,6 @@
 .clearfix { clear: both; }
 
 body { width: 940px; margin:0px auto; }
-table { width: 100%; border-style: solid; border-width: 1px; }
-table thead tr { border-bottom: 1px solid; }
-table td { padding: 3px; }
+table { width: 100%; border: 1px solid; border-collapse: collapse; }
+table tbody td { border: 1px solid; border-style: inset; }
+table thead th { border: 1px solid; border-style: inset; }
