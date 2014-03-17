@@ -7,15 +7,19 @@ from django.forms.models import inlineformset_factory
 from django.core.urlresolvers import reverse
 from stagings.models import Staging, Order, LineItem, StagingZone
 from stagings.forms import OrderLineFormSet
+from stagings import constants
+from braces.views import GroupRequiredMixin
+from stagings.decorators import group_required
 
 
-class BelongsToStaging(object):
+class BelongsToStagingMixin(object):
+
   @property
   def staging(self):
     return Staging.objects.get(pk=self.kwargs.get(self.pk_url_kwarg, None))
 
   def get_context_data(self, **kwargs):
-    context = super(BelongsToStaging, self).get_context_data(**kwargs)
+    context = super(BelongsToStagingMixin, self).get_context_data(**kwargs)
     context['staging'] = self.staging
     return context
 
@@ -24,10 +28,13 @@ class IndexView(generic.ListView):
   model = Staging
 
 
-class StagingOrdersView(BelongsToStaging, generic.ListView):
+class StagingOrdersView(GroupRequiredMixin,
+                        BelongsToStagingMixin,
+                        generic.ListView):
   model = Order
   template_name = 'stagings/staging_order_list.html'
   pk_url_kwarg = 'pk'
+  group_required = constants.COURIERS_GROUP
 
   def get_queryset(self):
     # TODO: rework for joins to get rid of possible performance issues
@@ -43,8 +50,11 @@ class StagingDetailView(generic.DetailView):
   model = Staging
 
 
-class CreateOrderView(BelongsToStaging, generic.CreateView):
+class CreateOrderView(GroupRequiredMixin,
+                      BelongsToStagingMixin,
+                      generic.CreateView):
   model = Order
+  group_required = constants.CLIENTS_GROUP
 
   @property
   def available_zones_number(self):
@@ -101,11 +111,13 @@ class CreateOrderView(BelongsToStaging, generic.CreateView):
 
 
 @csrf_protect
+@group_required(constants.COURIERS_GROUP)
 def cancel_orders(request):
   return _process_orders(request, lambda x: x.cancel())
 
 
 @csrf_protect
+@group_required(constants.COURIERS_GROUP)
 def pay_orders(request):
   return _process_orders(request, lambda x: x.pay())
 
