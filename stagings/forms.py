@@ -18,6 +18,6 @@ class OrderLineFormSet(BaseInlineFormSet):
 
     if order_total <= 0:
       for form in self.forms:
-        form.errors['__all__'] = form.error_class(['Order total must be positive number.'])
+        form.errors['quantity'] = form.error_class(['Order total must be positive number.'])
 
     self.order_total = order_total

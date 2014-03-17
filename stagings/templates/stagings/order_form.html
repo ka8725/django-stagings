@@ -33,7 +33,6 @@
           </tfoot>
           <tbody>
             {% for form in form.forms %}
-              {{ form.non_field_errors }}
               {% with zone=form.instance.zone %}
                 <tr>
                   <td>{{ zone }}</td>

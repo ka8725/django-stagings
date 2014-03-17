@@ -75,11 +75,11 @@ class CreateOrderView(GroupRequiredMixin,
   group_required = constants.CLIENTS_GROUP
 
   @property
-  def available_zones_number(self):
-    return len(self.zones)
+  def _available_zones_number(self):
+    return len(self._zones)
 
   @property
-  def zones(self):
+  def _zones(self):
     return [zone for zone in self.staging.zones
                   if zone.available_seats > 0]
 
@@ -88,8 +88,8 @@ class CreateOrderView(GroupRequiredMixin,
       Order,
       LineItem,
       formset=OrderLineFormSet,
-      extra=self.available_zones_number,
-      max_num=self.available_zones_number,
+      extra=self._available_zones_number,
+      max_num=self._available_zones_number,
       can_order=False,
       can_delete=False,
     )
@@ -98,7 +98,7 @@ class CreateOrderView(GroupRequiredMixin,
     formset = None
     if self.request.method == 'GET':
       formset = form_class()
-      for subform, zone in zip(formset.forms, self.zones):
+      for subform, zone in zip(formset.forms, self._zones):
         subform.initial = {'zone': zone}
         subform.instance.zone = zone
     elif self.request.method == 'POST':

@@ -11,18 +11,18 @@
         <thead>
           <tr>
             <th>Zone</th>
+            <th>Ticket price</th>
             <th>Total seats</th>
             <th>Available seats</th>
-            <th>Ticket price, BYR</th>
           </tr>
         </thead>
         <tbody>
           {% for zone in staging.zones %}
             <tr>
               <td>{{ zone }}</td>
+              <td>{{ zone.ticket_price }}</td>
               <td>{{ zone.total_seats }}</td>
               <td>{{ zone.available_seats }}</td>
-              <td>{{ zone.ticket_price }}</td>
             </tr>
           {% endfor %}
         </tbody>
