@@ -47,4 +47,15 @@ def set_groups_and_pepermissions(**kwargs):
     change_order_permission,
   )
 
+  if not User.objects.filter(email='client@test.com'):
+    user = User.objects.create_user('client', 'client@test.com', '123')
+    user.groups.add(clients_group)
+
+  if not User.objects.filter(email='admin@test.com'):
+    User.objects.create_superuser('admin', 'admin@test.com', '123')
+
+  if not User.objects.filter(email='courier@test.com'):
+    user = User.objects.create_user('courier', 'courier@test.com', '123')
+    user.groups.add(couriers_group)
+
 post_syncdb.connect(set_groups_and_pepermissions)
