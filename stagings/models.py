@@ -37,7 +37,7 @@ class Zone(models.Model):
 
 
 class Staging(models.Model):
-  piece = models.ForeignKey(Piece)
+  piece = models.ForeignKey(Piece, unique_for_date='date')
   date = models.DateField()
 
   def is_past(self):

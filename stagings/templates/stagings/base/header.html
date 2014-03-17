@@ -1,6 +1,8 @@
 <header>
   <div class='pull-left'>
     <span><a href="{% url 'stagings:index' %}">Home</a></span>
+    <br />
+    <span>Today: {% now "d.m" %}</span>
   </div>
 
   <div class='pull-right'>

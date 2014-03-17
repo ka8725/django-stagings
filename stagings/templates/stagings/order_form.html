@@ -12,7 +12,7 @@
         {{ form.management_form }}
         {{ form.staging }}
         {% csrf_token %}
-        <table border='1'>
+        <table>
           <thead>
             <tr>
               <th>Zone</th>
@@ -53,6 +53,7 @@
           </tbody>
         </table>
         <input type='submit' value='Order'></input>
+        <a href="{% url 'stagings:index' %}">Cancel order</a>
       </form>
     {% else %}
       <p>There are no available vacant seats.</p>
