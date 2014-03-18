@@ -2,13 +2,13 @@
   pk: 1
   fields:
     name: VIP
-    total_seats: 10
+    total_seats: 100
 
 - model: stagings.zone
   pk: 2
   fields:
     name: General
-    total_seats: 20
+    total_seats: 200
 
 - model: stagings.author
   pk: 1
@@ -37,24 +37,119 @@
     author: 1
     genre: 2
 
+- model: stagings.piece
+  pk: 2
+  fields:
+    name: Groundlings
+    author: 1
+    genre: 1
+
 - model: stagings.staging
   pk: 1
   fields:
     piece: 1
+    date: '2014-03-10'
+
+- model: stagings.staging
+  pk: 2
+  fields:
+    piece: 1
+    date: '2014-03-25'
+
+- model: stagings.staging
+  pk: 3
+  fields:
+    piece: 1
+    date: '2014-03-30'
+
+- model: stagings.staging
+  pk: 4
+  fields:
+    piece: 2
+    date: '2014-03-31'
+
+- model: stagings.staging
+  pk: 5
+  fields:
+    piece: 2
     date: '2014-03-30'
 
 - model: stagings.stagingzone
   pk: 1
   fields:
     staging: 1
-    available_seats: 10
+    available_seats: 70
     zone: 1
-    ticket_price: 20
+    ticket_price: 85
 
 - model: stagings.stagingzone
   pk: 2
   fields:
     staging: 1
-    available_seats: 20
+    available_seats: 70
     zone: 2
-    ticket_price: 10
+    ticket_price: 35
+
+- model: stagings.stagingzone
+  pk: 3
+  fields:
+    staging: 2
+    available_seats: 40
+    zone: 1
+    ticket_price: 45
+
+- model: stagings.stagingzone
+  pk: 4
+  fields:
+    staging: 2
+    available_seats: 80
+    zone: 2
+    ticket_price: 55
+
+- model: stagings.stagingzone
+  pk: 5
+  fields:
+    staging: 3
+    available_seats: 30
+    zone: 1
+    ticket_price: 45
+
+- model: stagings.stagingzone
+  pk: 6
+  fields:
+    staging: 3
+    available_seats: 50
+    zone: 2
+    ticket_price: 45
+
+- model: stagings.stagingzone
+  pk: 7
+  fields:
+    staging: 4
+    available_seats: 60
+    zone: 1
+    ticket_price: 35
+
+- model: stagings.stagingzone
+  pk: 8
+  fields:
+    staging: 4
+    available_seats: 25
+    zone: 2
+    ticket_price: 15
+
+- model: stagings.stagingzone
+  pk: 9
+  fields:
+    staging: 5
+    available_seats: 30
+    zone: 1
+    ticket_price: 40
+
+- model: stagings.stagingzone
+  pk: 10
+  fields:
+    staging: 5
+    available_seats: 80
+    zone: 2
+    ticket_price: 20
