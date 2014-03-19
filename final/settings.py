@@ -60,6 +60,7 @@ class Base(Configuration):
 
   ACCOUNT_ACTIVATION_DAYS = 7
   AUTH_USER_EMAIL_UNIQUE = True
+  STATIC_ROOT = 'staticfiles'
 
 
 class Dev(Base):
@@ -103,8 +104,3 @@ class Prod(Base):
   }
 
   SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-  STATIC_ROOT = 'staticfiles'
-
-  STATICFILES_DIRS = (
-    os.path.join(Base.BASE_DIR, 'static'),
-  )
