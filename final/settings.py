@@ -1,116 +1,209 @@
-"""
-Django settings for final project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+import dj_database_url
+from configurations import Configuration
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+class Dev(Configuration):
+  BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'h=q7k_ieod06s=ng20r(mky1qc5jwy%c$d(-^9&v)0&_g4rg(r'
+  # Quick-start development settings - unsuitable for production
+  # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+  # SECURITY WARNING: keep the secret key used in production secret!
+  SECRET_KEY = 'h=q7k_ieod06s=ng20r(mky1qc5jwy%c$d(-^9&v)0&_g4rg(r'
 
-TEMPLATE_DEBUG = True
+  # Application definition
 
-ALLOWED_HOSTS = []
+  INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'braces',
+    'registration',
+    'stagings',
+    )
 
-ACCOUNT_ACTIVATION_DAYS = 7
-AUTH_USER_EMAIL_UNIQUE = True
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'stagings@example.com'
+  MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    )
 
-# Application definition
+  TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'stagings.context_processors.last_commit_date',
+    'stagings.context_processors.is_courier',
+    )
 
-INSTALLED_APPS = (
-  'django.contrib.admin',
-  'django.contrib.auth',
-  'django.contrib.contenttypes',
-  'django.contrib.sessions',
-  'django.contrib.messages',
-  'django.contrib.staticfiles',
-  'braces',
-  'registration',
-  'stagings',
+  ROOT_URLCONF = 'final.urls'
+
+  WSGI_APPLICATION = 'final.wsgi.application'
+
+  # Internationalization
+  # https://docs.djangoproject.com/en/1.6/topics/i18n/
+
+  LANGUAGE_CODE = 'en-us'
+
+  TIME_ZONE = 'UTC'
+
+  USE_I18N = True
+
+  USE_L10N = True
+
+  USE_TZ = True
+
+
+  # Static files (CSS, JavaScript, Images)
+  # https://docs.djangoproject.com/en/1.6/howto/static-files/
+
+  STATIC_URL = '/static/'
+
+  TEMPLATE_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
   )
 
-MIDDLEWARE_CLASSES = (
-  'django.contrib.sessions.middleware.SessionMiddleware',
-  'django.middleware.common.CommonMiddleware',
-  'django.middleware.csrf.CsrfViewMiddleware',
-  'django.contrib.auth.middleware.AuthenticationMiddleware',
-  'django.contrib.messages.middleware.MessageMiddleware',
-  'django.middleware.clickjacking.XFrameOptionsMiddleware',
-  )
+  LOGIN_REDIRECT_URL = '/'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-  'django.contrib.auth.context_processors.auth',
-  'django.core.context_processors.debug',
-  'django.core.context_processors.i18n',
-  'django.core.context_processors.media',
-  'django.core.context_processors.static',
-  'django.core.context_processors.tz',
-  'django.contrib.messages.context_processors.messages',
-  'stagings.context_processors.last_commit_date',
-  'stagings.context_processors.is_courier',
-  )
+  DEBUG = True
 
-ROOT_URLCONF = 'final.urls'
+  TEMPLATE_DEBUG = True
 
-WSGI_APPLICATION = 'final.wsgi.application'
+  ALLOWED_HOSTS = ['*']
 
+  ACCOUNT_ACTIVATION_DAYS = 7
+  AUTH_USER_EMAIL_UNIQUE = True
+  EMAIL_HOST = 'localhost'
+  EMAIL_PORT = 1025
+  EMAIL_HOST_USER = ''
+  EMAIL_HOST_PASSWORD = ''
+  EMAIL_USE_TLS = False
+  DEFAULT_FROM_EMAIL = 'stagings@example.com'
 
-# Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+  # Database
+  # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'final',
-    'HOST': '127.0.0.1',
-    'USERNAME': 'ka8725',
-    'PORT': '5432',
-    'PASSWORD': '',
-    'ATOMIC_REQUEST': True,
+  DATABASES = {
+    'default': {
+      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+      'NAME': 'final',
+      'HOST': '127.0.0.1',
+      'USERNAME': 'ka8725',
+      'PORT': '5432',
+      'PASSWORD': '',
+      'ATOMIC_REQUEST': True,
+    }
   }
-}
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
+class Prod(Configuration):
+  BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-STATIC_URL = '/static/'
+  # Quick-start development settings - unsuitable for production
+  # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
-TEMPLATE_DIRS = (
-  os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
-)
+  # SECURITY WARNING: keep the secret key used in production secret!
+  SECRET_KEY = 'h=q7k_ieod06s=ng20r(mky1qc5jwy%c$d(-^9&v)0&_g4rg(r'
 
-LOGIN_REDIRECT_URL = '/'
+  # Application definition
+
+  INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'braces',
+    'registration',
+    'stagings',
+    )
+
+  MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    )
+
+  TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'stagings.context_processors.last_commit_date',
+    'stagings.context_processors.is_courier',
+    )
+
+  ROOT_URLCONF = 'final.urls'
+
+  WSGI_APPLICATION = 'final.wsgi.application'
+
+  # Internationalization
+  # https://docs.djangoproject.com/en/1.6/topics/i18n/
+
+  LANGUAGE_CODE = 'en-us'
+
+  TIME_ZONE = 'UTC'
+
+  USE_I18N = True
+
+  USE_L10N = True
+
+  USE_TZ = True
+
+
+  # Static files (CSS, JavaScript, Images)
+  # https://docs.djangoproject.com/en/1.6/howto/static-files/
+
+  STATIC_URL = '/static/'
+
+  TEMPLATE_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
+  )
+
+  LOGIN_REDIRECT_URL = '/'
+
+  ALLOWED_HOSTS = ['*']
+
+  ACCOUNT_ACTIVATION_DAYS = 7
+  AUTH_USER_EMAIL_UNIQUE = True
+  EMAIL_HOST = 'localhost'
+  EMAIL_PORT = 1025
+  EMAIL_HOST_USER = ''
+  EMAIL_HOST_PASSWORD = ''
+  EMAIL_USE_TLS = False
+  DEFAULT_FROM_EMAIL = 'stagings@example.com'
+
+  # Database
+  # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+
+  DEBUG = False
+
+  TEMPLATE_DEBUG = False
+  DATABASES = {
+    'default': dj_database_url.config()
+  }
+
+  SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+  STATIC_ROOT = 'staticfiles'
+
+  STATICFILES_DIRS = (
+      os.path.join(BASE_DIR, 'static'),
+  )
