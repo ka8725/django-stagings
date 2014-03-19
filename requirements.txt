@@ -5,9 +5,9 @@ django-braces==1.4.0
 django-configurations==0.8
 django-registration==1.0
 django-toolbelt==0.0.1
-gunicorn==18.0
 psycopg2==2.5.2
 pystache==0.5.3
 six==1.6.1
 static==1.0.2
+waitress==0.8.8
 wsgiref==0.1.2

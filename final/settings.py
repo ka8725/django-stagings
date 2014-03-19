@@ -6,13 +6,7 @@ from configurations import Configuration
 class Dev(Configuration):
   BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-  # Quick-start development settings - unsuitable for production
-  # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-  # SECURITY WARNING: keep the secret key used in production secret!
   SECRET_KEY = 'h=q7k_ieod06s=ng20r(mky1qc5jwy%c$d(-^9&v)0&_g4rg(r'
-
-  # Application definition
 
   INSTALLED_APPS = (
     'django.contrib.admin',
@@ -51,9 +45,6 @@ class Dev(Configuration):
 
   WSGI_APPLICATION = 'final.wsgi.application'
 
-  # Internationalization
-  # https://docs.djangoproject.com/en/1.6/topics/i18n/
-
   LANGUAGE_CODE = 'en-us'
 
   TIME_ZONE = 'UTC'
@@ -63,10 +54,6 @@ class Dev(Configuration):
   USE_L10N = True
 
   USE_TZ = True
-
-
-  # Static files (CSS, JavaScript, Images)
-  # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
   STATIC_URL = '/static/'
 
@@ -91,9 +78,6 @@ class Dev(Configuration):
   EMAIL_USE_TLS = False
   DEFAULT_FROM_EMAIL = 'stagings@example.com'
 
-  # Database
-  # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
   DATABASES = {
     'default': {
       'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -110,13 +94,7 @@ class Dev(Configuration):
 class Prod(Configuration):
   BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-  # Quick-start development settings - unsuitable for production
-  # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-  # SECURITY WARNING: keep the secret key used in production secret!
   SECRET_KEY = 'h=q7k_ieod06s=ng20r(mky1qc5jwy%c$d(-^9&v)0&_g4rg(r'
-
-  # Application definition
 
   INSTALLED_APPS = (
     'django.contrib.admin',
@@ -155,9 +133,6 @@ class Prod(Configuration):
 
   WSGI_APPLICATION = 'final.wsgi.application'
 
-  # Internationalization
-  # https://docs.djangoproject.com/en/1.6/topics/i18n/
-
   LANGUAGE_CODE = 'en-us'
 
   TIME_ZONE = 'UTC'
@@ -167,10 +142,6 @@ class Prod(Configuration):
   USE_L10N = True
 
   USE_TZ = True
-
-
-  # Static files (CSS, JavaScript, Images)
-  # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
   STATIC_URL = '/static/'
 
@@ -184,15 +155,13 @@ class Prod(Configuration):
 
   ACCOUNT_ACTIVATION_DAYS = 7
   AUTH_USER_EMAIL_UNIQUE = True
-  EMAIL_HOST = 'localhost'
-  EMAIL_PORT = 1025
-  EMAIL_HOST_USER = ''
-  EMAIL_HOST_PASSWORD = ''
-  EMAIL_USE_TLS = False
-  DEFAULT_FROM_EMAIL = 'stagings@example.com'
 
-  # Database
-  # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+  EMAIL_HOST = "smtp.sendgrid.net"
+  EMAIL_HOST_USER = os.environ.get("SENDGRID_USERNAME", "")
+  EMAIL_HOST_PASSWORD = os.environ.get("SENDGRID_PASSWORD", "")
+  EMAIL_PORT = 25
+  EMAIL_USE_TLS = False
+  DEFAULT_FROM_EMAIL = 'heroku@stagings.com'
 
   DEBUG = False
 
