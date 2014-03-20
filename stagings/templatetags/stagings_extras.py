@@ -1,4 +1,5 @@
 from django import template
+from django.db.models import Sum
 from stagings import models
 from stagings import constants
 
@@ -31,13 +32,11 @@ def is_courier(user):
 
 
 def _seats_for_zone(user, staging_zone, status):
-  # TODO: rework for joins to get rid of possible performance issues
-  orders = models.Order.objects.filter(user=user, status=status).all()
-  line_items = models.LineItem.objects.filter(
-    zone=staging_zone.zone,
+  orders = models.Order.objects.filter(user=user, status=status).prefetch_related('lineitem_set')
+  return models.LineItem.objects.filter(
+    zone=staging_zone,
     order__in=orders,
-  )
-  return sum(line_item.quantity for line_item in line_items)
+  ).aggregate(seats_for_zone=Sum('quantity'))['seats_for_zone']
 
 
 def _tickets_sum(user, zones, status):
