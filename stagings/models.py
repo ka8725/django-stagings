@@ -1,8 +1,12 @@
+from registration.signals import user_activated
+from django.dispatch import receiver
 from django.db import models
 from datetime import date
 from django.core.exceptions import ValidationError
 from django.utils.functional import cached_property
 from django.contrib.auth.models import User
+from stagings import constants
+from django.contrib.auth.models import Group
 
 
 class Author(models.Model):
@@ -113,3 +117,11 @@ class LineItem(models.Model):
 
   def __unicode__(self):
     return '%s - %s' % (self.zone.zone, self.quantity)
+
+
+@receiver(user_activated)
+def add_user_to_clients_group(sender, **kwargs):
+  clients_group, _ = Group.objects.get_or_create(
+    name=constants.CLIENTS_GROUP
+  )
+  kwargs['user'].groups.add(clients_group)
