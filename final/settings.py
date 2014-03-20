@@ -35,7 +35,6 @@ class Base(Configuration):
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
-    'stagings.context_processors.last_commit_date',
     'stagings.context_processors.is_courier',
     )
 
