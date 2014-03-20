@@ -60,7 +60,7 @@ class Base(Configuration):
 
   ACCOUNT_ACTIVATION_DAYS = 7
   AUTH_USER_EMAIL_UNIQUE = True
-  STATIC_ROOT = 'staticfiles'
+  STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 class Dev(Base):
