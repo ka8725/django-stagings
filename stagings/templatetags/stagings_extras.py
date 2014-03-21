@@ -30,13 +30,16 @@ def paid_tickets_sum(user, zones):
 def is_courier(user):
   return user.groups.filter(name=constants.COURIERS_GROUP)
 
+@register.filter
+def lookup(d, key):
+  return d[key]
 
 def _seats_for_zone(user, staging_zone, status):
   orders = models.Order.objects.filter(user=user, status=status).prefetch_related('lineitem_set')
   return models.LineItem.objects.filter(
     zone=staging_zone,
     order__in=orders,
-  ).aggregate(seats_for_zone=Sum('quantity'))['seats_for_zone']
+  ).aggregate(seats_for_zone=Sum('quantity'))['seats_for_zone'] or 0
 
 
 def _tickets_sum(user, zones, status):

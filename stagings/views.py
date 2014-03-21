@@ -1,13 +1,14 @@
 from django.views.decorators.csrf import csrf_protect
 from datetime import date
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views import generic
 from django.forms.models import inlineformset_factory
 from django.core.urlresolvers import reverse
 from stagings.models import Staging, Order, LineItem, StagingZone
 from stagings.forms import OrderLineFormSet
 from stagings import constants
+from stagings import reports
 from braces.views import GroupRequiredMixin
 from stagings.decorators import group_required
 
@@ -136,6 +137,17 @@ def cancel_orders(request):
 def pay_orders(request):
   return _process_orders(request, lambda x: x.pay())
 
+@group_required(constants.COURIERS_GROUP)
+def orders_report(request):
+  zones_report = reports.ZonesReport().report
+  context = {
+    'zones_report': [],
+    'zones_report_summary': None,
+  }
+  if zones_report:
+    context['zones_report'] = zones_report[0:-1]
+    context['zones_report_summary'] = zones_report[-1]
+  return render(request, 'stagings/orders_report.html', context)
 
 def _process_orders(request, command):
   order_ids = request.POST.getlist('order_ids')

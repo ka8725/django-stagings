@@ -1,0 +1,40 @@
+{% extends 'stagings/base.html' %}
+{% load stagings_extras %}
+
+{% block content %}
+  <h2>Zones report</h2>
+  {% if zones_report %}
+    <table>
+      <thead>
+        <tr>
+          <th>Zone</th>
+          <th>Total tickets</th>
+          <th>Last tickets</th>
+          <th>Unpaid tickets</th>
+          <th>Paid tickets</th>
+          <th>Earnings</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <th align='left' colspan='5'>Total earning</th>
+          <th align='left'>{{ zones_report_summary|lookup:'total_earning' }}</th>
+        </tr>
+      </tfoot>
+      <tbody>
+        {% for zone_report in zones_report %}
+            <tr>
+              <td>{{ zone_report|lookup:'zone' }}</td>
+              <td>{{ zone_report|lookup:'total_tickets' }}</td>
+              <td>{{ zone_report|lookup:'last_tickets' }}</td>
+              <td>{{ zone_report|lookup:'ordered_tickets' }}</td>
+              <td>{{ zone_report|lookup:'paid_tickets' }}</td>
+              <td>{{ zone_report|lookup:'earnings' }}</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Report is empty</p>
+  {% endif %}
+{% endblock %}

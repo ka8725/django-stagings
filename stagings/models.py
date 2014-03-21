@@ -111,6 +111,12 @@ class LineItem(models.Model):
   quantity = models.PositiveSmallIntegerField(default=0)
   zone = models.ForeignKey(StagingZone)
 
+  def is_paid(self):
+    return self.order.status == Order.PAID
+
+  def is_new(self):
+    return self.order.status == Order.NEW
+
   @property
   def total(self):
     return (self.quantity or 0) * self.zone.ticket_price

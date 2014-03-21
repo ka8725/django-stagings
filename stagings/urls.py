@@ -6,7 +6,8 @@ from stagings.views import (IndexView,
                             OrderConfirmationView,
                             CancelOrderView,
                             pay_orders,
-                            cancel_orders)
+                            cancel_orders,
+                            orders_report)
 
 urlpatterns = patterns('',
   url(r'^$',
@@ -40,4 +41,9 @@ urlpatterns = patterns('',
   url(r'^pay_orders$',
     pay_orders,
     name='pay_orders'),
+
+  url(r'^orders_report$',
+    orders_report,
+    name='orders_report',
+  )
 )
