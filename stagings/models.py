@@ -27,6 +27,7 @@ class Piece(models.Model):
   name = models.CharField(max_length=255)
   genre = models.ForeignKey(Genre)
   author = models.ForeignKey(Author)
+  description = models.TextField()
 
   def __unicode__(self):
     return self.name

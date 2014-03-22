@@ -25,7 +25,6 @@ def paid_seats_for_zone(user, staging_zone):
 def paid_tickets_sum(user, zones):
   return _tickets_sum(user, zones, models.Order.PAID)
 
-
 @register.filter
 def is_courier(user):
   return user.groups.filter(name=constants.COURIERS_GROUP)

@@ -36,6 +36,14 @@
     name: Dead souls
     author: 1
     genre: 2
+    description: >
+      The story follows the exploits of Chichikov, a middle-aged gentleman of middling social class and means.
+      Chichikov arrives in a small town and turns on the charm to quickly make friends with key local officials
+      and landowners. He reveals little about his past, or his purpose, as he sets about carrying out his
+      bizarre and mysterious plan to acquire "dead souls".
+      Although the townspeople Chichikov comes across are gross caricatures, they are not flat stereotypes
+      by any means. Instead, each is neurotically individual, combining the official failings that Gogol
+      typically satirizes (greed, corruption, paranoia) with a curious set of personal quirks.
 
 - model: stagings.piece
   pk: 2
