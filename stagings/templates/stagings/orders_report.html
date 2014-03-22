@@ -37,4 +37,37 @@
   {% else %}
     <p>Report is empty</p>
   {% endif %}
+  <h2>Unpaid line items report</h2>
+  {% if unpaid_orders_report %}
+    <table>
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Date</th>
+          <th>Details</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <th align='left' colspan='3'>Total</th>
+        <th align='left'>{{ unpaid_orders_report_total }}</th>
+      </tfoot>
+      <tbody>
+        {% for order in unpaid_orders_report %}
+          <tr>
+            <td>{{ order.user }}</td>
+            <td>{{ order.date|date:'d.m' }}</td>
+            <td>
+              {% for line_item in order.lineitem_set.all %}
+                {{ line_item }}<br/>
+              {% endfor %}
+            </td>
+            <td>{{ order.total }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Report is empty</p>
+  {% endif %}
 {% endblock %}

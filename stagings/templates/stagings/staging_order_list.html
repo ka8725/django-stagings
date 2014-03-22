@@ -6,8 +6,8 @@
   {% if order_list %}
     <form method='POST'>
       {% csrf_token %}
-      <table border='1'>
-        <head>
+      <table>
+        <thead>
           <tr>
             <th></th>
             <th>User</th>
@@ -15,7 +15,7 @@
             <th>Details</th>
             <th>Total</th>
           </tr>
-        </head>
+        </thead>
         <tbody>
           {% for order in order_list %}
             <tr>

@@ -147,6 +147,13 @@ def orders_report(request):
   if zones_report:
     context['zones_report'] = zones_report[0:-1]
     context['zones_report_summary'] = zones_report[-1]
+
+
+  unpaid_orders = Order.objects.filter(
+    status=Order.NEW
+  ).prefetch_related('lineitem_set').all()
+  context['unpaid_orders_report'] = unpaid_orders
+  context['unpaid_orders_report_total'] = sum(map(lambda order: order.total, unpaid_orders))
   return render(request, 'stagings/orders_report.html', context)
 
 def _process_orders(request, command):
