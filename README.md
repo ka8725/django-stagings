@@ -20,3 +20,13 @@ Test application for Django framework.
 
 If you want to test user reqistration run a mailserver to receive emails for user activation instructions. With default settings the application will send the emails to a port `25`. The simplest way to run mailserver locally is to use this command:
 `python -m smtpd -n -c DebuggingServer localhost:1025`. Now the mailserver listens to incoming emails for `1025/25` port.
+
+Correctly installed application concains the following registered users in the system:
+
+1. Superuser: admin/123
+2. Client: client/123
+3. Courier: courier/123
+
+## Heroku
+
+This application has already [deployed on Heroku](http://agile-atoll-1564.herokuapp.com).
