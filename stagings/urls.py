@@ -7,7 +7,8 @@ from stagings.views import (IndexView,
                             CancelOrderView,
                             pay_orders,
                             cancel_orders,
-                            orders_report)
+                            orders_report,
+                            piece_description)
 
 urlpatterns = patterns('',
   url(r'^$',
@@ -45,5 +46,10 @@ urlpatterns = patterns('',
   url(r'^orders_report$',
     orders_report,
     name='orders_report',
+  ),
+
+  url(r'^piece/(?P<pk>\d+)/description$',
+    piece_description,
+    name='piece_description',
   )
 )

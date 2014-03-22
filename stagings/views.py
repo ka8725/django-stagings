@@ -5,12 +5,14 @@ from django.shortcuts import redirect, render
 from django.views import generic
 from django.forms.models import inlineformset_factory
 from django.core.urlresolvers import reverse
-from stagings.models import Staging, Order, LineItem, StagingZone
+from stagings.models import Staging, Order, LineItem, StagingZone, Piece
 from stagings.forms import OrderLineFormSet
 from stagings import constants
 from stagings import reports
 from braces.views import GroupRequiredMixin
 from stagings.decorators import group_required
+from django.http import HttpResponse
+import json
 
 
 class BelongsToStagingMixin(object):
@@ -155,6 +157,11 @@ def orders_report(request):
   context['unpaid_orders_report'] = unpaid_orders
   context['unpaid_orders_report_total'] = sum(map(lambda order: order.total, unpaid_orders))
   return render(request, 'stagings/orders_report.html', context)
+
+def piece_description(request, pk):
+  return HttpResponse(json.dumps({
+      'description': Piece.objects.get(pk=pk).description
+  }), content_type='application/json')
 
 def _process_orders(request, command):
   order_ids = request.POST.getlist('order_ids')

@@ -12,6 +12,7 @@
     <dd>{{ staging.date }}</dd>
 </dl>
 
-<p>
-  {{ staging.piece.description|truncatewords:40 }}
-</p>
+<div>
+  <p>{{ staging.piece.description|truncatewords:40 }}</p>
+  <a href="{% url 'stagings:piece_description' staging.piece_id %}" class='more-description'>More</a>
+</div>
